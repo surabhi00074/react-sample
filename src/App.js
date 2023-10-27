@@ -12,8 +12,8 @@ const App = () => {
   const [editing, setEditing] = useState(false);
   const initialFormState = {
     id: null,
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     username: "",
     email: "",
     image: "",
@@ -28,8 +28,8 @@ const App = () => {
       .then((response) =>
         response.data.map((user) => ({
           id: user.id,
-          first_name: user.firstName,
-          last_name: user.lastName,
+          firstName: user.firstName,
+          lastName: user.lastName,
           age: user.age,
           username: user.username,
           email: user.email,
@@ -46,12 +46,12 @@ const App = () => {
     toggle();
     setCurrentUser({
       id: user.id,
-      first_name: user.first_name,
-      last_name: user.last_name,
+      firstName: user.firstName,
+      lastName: user.lastName,
       username: user.username,
       email: user.email,
       image: user.image,
-      age: user.age
+      age: user.age,
     });
   };
 
@@ -90,11 +90,7 @@ const App = () => {
       ) : (
         <div></div>
       )}
-      <Users
-        users={currentUsers}
-        editUser={editUser}
-        deleteUser={deleteUser}
-      />
+      <Users users={currentUsers} editUser={editUser} deleteUser={deleteUser} />
       <Pagination
         usersPerPage={usersPerPage}
         totalUsers={users.length}

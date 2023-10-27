@@ -2,13 +2,15 @@ import React, { useState, useMemo } from "react";
 import IconButton from "@material-ui/core/IconButton";
 import DeleteIcon from "@material-ui/icons/Delete";
 import EditIcon from "@material-ui/icons/Edit";
+import { useNavigate } from "react-router-dom";
+
 
 const useSortableData = (users, config = null) => {
   const [sortConfig, setSortConfig] = useState(config);
 
   const [selectedUser, setSelectedUser] = useState({
-    first_name: "",
-    last_name: "",
+    firstName: "",
+    lastName: "",
     email: "",
     username: "",
     age: "",
@@ -29,6 +31,7 @@ const useSortableData = (users, config = null) => {
     }
     return sortableUsers;
   }, [users, sortConfig]);
+  
 
   const requestSort = (key) => {
     let direction = "ascending";
@@ -44,11 +47,12 @@ const useSortableData = (users, config = null) => {
 
   return { users: sortedUsers, requestSort, sortConfig };
 };
-
+// const editRoute =
 const Users = (props) => {
   const { users, requestSort, sortConfig } = useSortableData(props.users);
   const { editUser, deleteUser } = props;
   const [searchValue, setSearchValue] = useState("");
+  const navigate = useNavigate();
   const getClassNamesFor = (name) => {
     if (!sortConfig) {
       return;
@@ -65,6 +69,9 @@ const Users = (props) => {
     );
   });
 
+const editUserDetails =(user)=> {
+  navigate("/edit", { state: { user: user } });
+}
   return (
     <>
       <div
@@ -80,8 +87,8 @@ const Users = (props) => {
                 <th>
                   <button
                     type="button"
-                    onClick={() => requestSort("first_name")}
-                    className={getClassNamesFor("first_name")}
+                    onClick={() => requestSort("firstName")}
+                    className={getClassNamesFor("firstName")}
                   >
                     First Name
                   </button>
@@ -89,8 +96,8 @@ const Users = (props) => {
                 <th>
                   <button
                     type="button"
-                    onClick={() => requestSort("last_name")}
-                    className={getClassNamesFor("last_name")}
+                    onClick={() => requestSort("lastName")}
+                    className={getClassNamesFor("lastName")}
                   >
                     Last Name
                   </button>
@@ -132,11 +139,11 @@ const Users = (props) => {
                     <td>
                       <img
                         src={user.image}
-                        alt={user.first_name + " " + user.last_name}
+                        alt={user.firstName + " " + user.lastName}
                       />
                     </td>
-                    <td>{user.first_name}</td>
-                    <td>{user.last_name}</td>
+                    <td>{user.firstName}</td>
+                    <td>{user.lastName}</td>
                     <td>{user.age}</td>
                     <td>{user.username}</td>
                     <td>{user.email}</td>
@@ -145,8 +152,10 @@ const Users = (props) => {
                         aria-label="edit"
                         onClick={() => {
                           editUser(user);
+                          editUserDetails(user);
                         }}
                       >
+                        
                         <EditIcon />
                       </IconButton>
                       <IconButton

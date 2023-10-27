@@ -1,24 +1,36 @@
 import React, { useState, useEffect } from "react";
+import { useLocation } from "react-router-dom";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const EditUserForm = (props) => {
+  console.log(props);
+  const navigate = useNavigate();
 
-  const [user, setUser] = useState(props.currentUser);
+  const { state } = useLocation();
+  console.log(state);
+  const [user, setUser] = useState(state.user);
 
   useEffect(() => {
-    setUser(props.currentUser);
-  }, [props]);
+    setUser(state.user);
+  }, [state]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
 
     setUser({ ...user, [name]: value });
   };
-
+const updatedUser = (id,user) => {
+    axios
+    .put(`http://localhost:3000/users/${id}`, user)
+    .then((response) => (response.status === 200 ? 
+          navigate('/', { state: { isUpdated: true} }) : null));
+}
   return (
     <form
       onSubmit={(event) => {
         event.preventDefault();
-        props.updateUser(user.id, user);
+        updatedUser(user.id, user);
       }}
     >
       <div className="form-group">
@@ -29,7 +41,6 @@ const EditUserForm = (props) => {
           name="firstName"
           value={user.firstName}
           onChange={handleInputChange}
-          pattern="[a-zA-Z]+"
           required
         />
       </div>
@@ -40,7 +51,6 @@ const EditUserForm = (props) => {
           name="lastName"
           value={user.lastName}
           onChange={handleInputChange}
-          pattern="[a-zA-Z]+"
           required
         />
       </div>
@@ -51,7 +61,6 @@ const EditUserForm = (props) => {
           name="age"
           value={user.age}
           onChange={handleInputChange}
-          pattern="[0-9]+"
           required
         />
       </div>
@@ -62,7 +71,6 @@ const EditUserForm = (props) => {
           name="username"
           value={user.username}
           onChange={handleInputChange}
-          pattern="[a-zA-Z0-9-]+"
           required
         />
       </div>
@@ -73,7 +81,6 @@ const EditUserForm = (props) => {
           name="email"
           value={user.email}
           onChange={handleInputChange}
-          pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
           required
         />
       </div>
